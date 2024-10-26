@@ -1,9 +1,9 @@
 import deepmerge from "@fastify/deepmerge";
-import { type PageFn } from "./lib";
+import { type HtmlPageFn, type LayoutPageFn } from "./lib";
 import { db } from "./db";
 import { z } from "zod";
 import { Template as VerificationEmailTemplate } from "@/emails/verify";
-
+import path from "path";
 import { loginUser, registerUser, verifyUser } from "./users/user-management";
 import {
   createSession,
@@ -20,10 +20,11 @@ import {
 import type { Session, User } from "@prisma/client";
 import { renderEmail, sendVerificationMail } from "./email";
 import { log } from "./log";
+import type { Children } from "@kitajs/html";
 
 const router = new Bun.FileSystemRouter({
   style: "nextjs",
-  dir: config.pages.root,
+  dir: path.resolve(process.cwd(), config.pages.root),
 });
 
 const respDefaults = {
@@ -94,6 +95,14 @@ const parseBody = async (req: Request) => {
   return await req.text();
 };
 
+const defaultLayout = (await import(
+  path.resolve(process.cwd(), config.pages.layout)
+)) as {
+  default: LayoutPageFn;
+};
+
+const applyLayout = () => {};
+
 async function main(req: Request): Promise<Response> {
   const pRes: pRes = {
     headers: {
@@ -105,12 +114,19 @@ async function main(req: Request): Promise<Response> {
   return handleRoute(pReq, pRes);
 }
 
-const getPageFn = async (pageRoute: string) =>
+const getHtmlPageFn = async (pageRoute: string) =>
   (await import(pageRoute)) as {
-    default: PageFn;
+    default: HtmlPageFn;
+    Layout?: LayoutPageFn;
   };
 
 async function handleRoute(req: pReq, res: pRes) {
+  const ctx = {
+    req,
+    res,
+    db,
+  };
+
   try {
     await handleRequest(req, res);
     await handleAuthRoutes(req, res);
@@ -118,33 +134,28 @@ async function handleRoute(req: pReq, res: pRes) {
     const matchedRoute = router.match(req.url.href);
 
     if (matchedRoute) {
-      const pageFn = await getPageFn(matchedRoute.filePath);
+      const HtmlPageFn = await getHtmlPageFn(matchedRoute.filePath);
 
-      const body = await pageFn.default({
-        req: {
-          ...req,
-          params: matchedRoute.params,
-          query: matchedRoute.query,
-        },
-        res,
-        db,
-      });
+      ctx.req.params = matchedRoute.params;
+      ctx.req.query = matchedRoute.query;
+
+      let body = await HtmlPageFn.default(ctx);
+      const layout = HtmlPageFn.Layout ?? defaultLayout.default;
+
+      body = await layout(ctx, body as Children);
 
       return new Response(body, deepmerge({ all: true })(respDefaults, res));
     }
 
-    const pageNotFound = await getPageFn(config.pages.not_found);
-
-    const pageNotFoundResp = await pageNotFound.default({
-      req,
-      res,
-      db,
-    });
-
-    return new Response(
-      pageNotFoundResp,
-      deepmerge({ all: true })(respDefaults, res)
+    const pageNotFound = await getHtmlPageFn(
+      path.resolve(process.cwd(), config.pages.not_found)
     );
+    const layout = pageNotFound.Layout ?? defaultLayout.default;
+
+    let body = await pageNotFound.default(ctx);
+    body = await layout(ctx, body as Children);
+
+    return new Response(body, deepmerge({ all: true })(respDefaults, res));
   } catch (e) {
     if (e instanceof Response) {
       return e;
@@ -152,18 +163,15 @@ async function handleRoute(req: pReq, res: pRes) {
 
     log.trace(e);
 
-    const pageError = await getPageFn(config.pages.error);
-
-    const pageErrorResp = await pageError.default({
-      req,
-      res,
-      db,
-    });
-
-    return new Response(
-      pageErrorResp,
-      deepmerge({ all: true })(respDefaults, res)
+    const pageError = await getHtmlPageFn(
+      path.resolve(process.cwd(), config.pages.error)
     );
+    const layout = pageError.Layout ?? defaultLayout.default;
+
+    let body = await pageError.default(ctx);
+    body = await layout(ctx, body as Children);
+
+    return new Response(body, deepmerge({ all: true })(respDefaults, res));
   }
 }
 
@@ -289,7 +297,6 @@ const passwordSchema = z.string();
 
 const loginSchema = z.object({
   email: z.string().email(),
-
   password: passwordSchema,
 });
 

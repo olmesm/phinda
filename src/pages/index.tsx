@@ -1,10 +1,5 @@
-import { HtmlPage } from "@phinda/lib";
-import { Layout } from "../components/layout";
+import { HtmlPage, LayoutPage } from "@phinda/lib";
 
 export default HtmlPage((ctx) => {
-  return (
-    <Layout>
-      <h1>Welcome {ctx.req.user ? ctx.req.user.email : "Guest"}!</h1>
-    </Layout>
-  );
+  return <h1>Welcome {ctx.req.user ? ctx.req.user.email : "Guest"}!</h1>;
 });

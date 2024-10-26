@@ -10,11 +10,16 @@ type Context = {
   res: pRes;
   db: DB;
 };
-export type PageFn = (ctx: Context) => Awaitable<Returnable>;
+export type HtmlPageFn = (ctx: Context) => Awaitable<Returnable>;
+export type LayoutPageFn = (
+  ctx: Context,
+  children: Children
+) => Awaitable<Returnable>;
 
 type Returnable = BodyInit | null | undefined;
 
-export const HtmlPage = (fn: PageFn) => fn;
+export const HtmlPage = (fn: HtmlPageFn) => fn;
+export const LayoutPage = (fn: LayoutPageFn) => fn;
 
 export function redirect(to: string, status = 302) {
   const headers = new Headers();

@@ -1,9 +1,8 @@
 import { HtmlPage } from "@phinda/lib";
-import { Layout } from "../../components/layout";
 
 export default HtmlPage(() => {
   return (
-    <Layout>
+    <>
       <h1>Login</h1>
       <form method="post" action="/__auth/login">
         <label>
@@ -17,6 +16,6 @@ export default HtmlPage(() => {
 
         <input type="submit" />
       </form>
-    </Layout>
+    </>
   );
 });

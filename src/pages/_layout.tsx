@@ -1,5 +1,5 @@
-import type { Children } from "../../server/lib";
-import { Header } from "./header";
+import { LayoutPage } from "@phinda/lib";
+import { Header } from "../components/header";
 
 const LINKS = [
   {
@@ -14,15 +14,15 @@ const LINKS = [
   { name: "login", url: "/auth/login" },
 ];
 
-export const Layout = ({ children }: { children: Children }) => (
+export default LayoutPage((ctx, children) => (
   <>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
     ></link>
     <main class="container">
-      <Header links={LINKS} />
+      <Header links={LINKS} user={ctx.req.user} />
       <div>{children}</div>
     </main>
   </>
-);
+));

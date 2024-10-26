@@ -1,15 +1,16 @@
 {
   "name": "phinda",
-  "exports": {
-    ".": "./server/index.ts",
-    "./lib": "./server/lib.ts"
-  },
   "scripts": {
-    "dev-web": "bunx prisma generate && bun run --hot server/index.ts",
-    "dev-email": "email preview ./src/emails",
-    "create-html": "",
-    "create-email": "email create",
-    "__build": "bun test:xss && bunx prisma generate && bun build --minify --compile",
+    "dev": "concurrently bun:dev:*",
+    "dev:open": "sleep 1 && open http://0.0.0.0:8025 && open http://0.0.0.0:3000",
+    "dev:web": "bun run --hot server/index.ts",
+    "dev:db": "prisma studio",
+    "dev:email-server": "docker run --rm -p 8025:8025 -p 1025:1025 mailhog/mailhog",
+    "preview:email": "email preview ./src/emails",
+    "migration": "prisma migrate dev",
+    "create:email": "email create",
+    "create:html": "echo TODO",
+    "test": "echo TODO",
     "test:xss": "xss-scan"
   },
   "type": "module",
@@ -17,6 +18,7 @@
     "@types/bun": "latest",
     "@types/lodash-es": "^4.17.12",
     "@types/nodemailer": "^6.4.16",
+    "concurrently": "^9.0.1",
     "prisma": "^5.21.1"
   },
   "peerDependencies": {
