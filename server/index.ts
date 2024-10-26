@@ -205,7 +205,7 @@ async function handleAuthRoutes(req: pReq, res: pRes) {
     setSessionTokenCookie(res, session);
 
     const headers = new Headers(res.headers);
-    headers.append("location", config.auth.route.login_redirect);
+    headers.append("location", config.auth.route.verify_redirect);
 
     throw new Response(undefined, {
       headers,
@@ -258,7 +258,7 @@ async function handleAuthRoutes(req: pReq, res: pRes) {
 
       await sendVerificationMail(user.email, renderedEmail);
 
-      headers.append("location", config.auth.route.verify_redirect);
+      headers.append("location", config.auth.route.register_redirect);
       throw new Response(undefined, {
         headers,
         status: 302,
