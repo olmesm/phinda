@@ -1,0 +1,4 @@
+# Bun doesnt respect tsconfig references
+## https://github.com/oven-sh/bun/issues/4774
+jsx = "react-jsx"
+jsxImportSource ="@kitajs/html"

@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./.tsconfig/tsconfig.web.json" },
+    { "path": "./.tsconfig/tsconfig.emails.json" }
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@/emails/*": ["./src/emails/*"],
+      "@phinda/core": ["./server/index.ts"],
+      "@phinda/*": ["./server/*"]
+    }
+  }
+}

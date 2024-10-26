@@ -1,0 +1,28 @@
+[pages]
+not_found = "./src/pages/404.tsx"
+error = "./src/pages/500.tsx"
+root = "src/pages"
+
+[auth]
+prefix = "/__auth"
+route.login = "/login"
+route.login_redirect = "/"
+route.verify = "/verify"
+route.verify_redirect = "/"
+
+route.logout = "/logout"
+route.logout_redirect = "/"
+
+route.register = "/register"
+route.register_redirect = "/"
+must_validate_email = true
+
+password_requirements.must_have_lowercase = true
+password_requirements.must_have_uppercase = true
+password_requirements.must_have_special = true
+password_requirements.must_have_number = true
+password_requirements.max_length = 20
+password_requirements.min_length = 8
+
+[email]
+from = "hello@phinda.com"
