@@ -101,8 +101,6 @@ const defaultLayout = (await import(
   default: LayoutPageFn;
 };
 
-const applyLayout = () => {};
-
 async function main(req: Request): Promise<Response> {
   const pRes: pRes = {
     headers: {
