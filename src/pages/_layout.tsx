@@ -7,6 +7,10 @@ const LINKS = [
     url: "/",
   },
   {
+    name: "Different Layout",
+    url: "/different-layout",
+  },
+  {
     name: "form test",
     url: "/form-test",
   },

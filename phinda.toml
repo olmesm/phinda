@@ -1,8 +1,8 @@
 [pages]
-not_found = "./src/pages/404.tsx"
-error = "./src/pages/500.tsx"
 root = "./src/pages"
 layout = "./src/pages/_layout.tsx"
+not_found = "./src/pages/404.tsx"
+error = "./src/pages/500.tsx"
 
 [auth]
 prefix = "/__auth"
