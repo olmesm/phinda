@@ -1,6 +1,10 @@
 [dev]
 prefix = "/__dev"
 
+[public_static]
+url = "/static"
+dir = "./src/static"
+
 [pages]
 root = "./src/pages"
 layout = "./src/pages/_layout.tsx"

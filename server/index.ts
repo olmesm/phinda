@@ -22,6 +22,7 @@ import { renderEmail, sendVerificationMail } from "./email";
 import { log } from "./log";
 import type { Children } from "@kitajs/html";
 import { hotReload } from "./hot-reload";
+import { staticServer } from "./static-server";
 
 const router = new Bun.FileSystemRouter({
   style: "nextjs",
@@ -130,6 +131,7 @@ async function handleRoute(req: pReq, res: pRes) {
     await handleRequest(req, res);
     await handleAuthRoutes(req, res);
     await hotReload(req, res);
+    await staticServer(req, res);
 
     const matchedRoute = router.match(req.url.href);
 

@@ -2,7 +2,7 @@
   "name": "phinda",
   "scripts": {
     "dev": "concurrently bun:dev:*",
-    "dev:open": "sleep 1 && open http://0.0.0.0:8025 && open http://0.0.0.0:3000",
+    "dev:open": "sleep 1 && open http://localhost:8025 && open http://localhost:3000",
     "dev:web": "bun run --hot server/index.ts",
     "dev:db": "prisma studio",
     "dev:email-server": "docker run --rm -p 8025:8025 -p 1025:1025 mailhog/mailhog",
