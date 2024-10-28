@@ -1,3 +1,6 @@
+[dev]
+prefix = "/__dev"
+
 [pages]
 root = "./src/pages"
 layout = "./src/pages/_layout.tsx"

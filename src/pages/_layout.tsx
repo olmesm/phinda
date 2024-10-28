@@ -1,4 +1,4 @@
-import { LayoutPage } from "@phinda/lib";
+import { LayoutPage, PhindaScripts } from "@phinda/lib";
 import { Header } from "../components/header";
 
 const LINKS = [
@@ -20,6 +20,7 @@ const LINKS = [
 
 export default LayoutPage((ctx, children) => (
   <>
+    <PhindaScripts />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"

@@ -2,6 +2,8 @@
 
 Phinda - _repeat in Zulu_ - is a simple JSX server built on bun.
 
+This aims to provide the foundations of getting an idea to users as quick as possible.
+
 ## Goals
 
 1. Simplicity
@@ -10,6 +12,7 @@ Phinda - _repeat in Zulu_ - is a simple JSX server built on bun.
 
 ## Features
 
+- [x] hot reload
 - [x] Support Pages and components
   - [x] query
   - [x] params
